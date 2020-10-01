@@ -1,10 +1,8 @@
 package com.dystopiastudios.easystory.controller;
 
-import com.dystopiastudios.easystory.model.Comment;
 import com.dystopiastudios.easystory.model.Post;
 import com.dystopiastudios.easystory.resource.CommentResource;
 import com.dystopiastudios.easystory.resource.PostResource;
-import com.dystopiastudios.easystory.resource.SaveCommentResource;
 import com.dystopiastudios.easystory.resource.SavePostResource;
 import com.dystopiastudios.easystory.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,15 +48,15 @@ public class PostController {
 
     @PostMapping("/users/{userId}/posts")
     public PostResource createPost(@PathVariable(name = "userId") Long userId,
-                                         @Valid @RequestBody SaveCommentResource resource) {
+                                         @Valid @RequestBody SavePostResource resource) {
         return convertToResource(postService.createPost(userId, convertToEntity(resource)));
 
     }
 
     @PutMapping("/users/{userId}/posts/{postId}")
-    public CommentResource updatePost(@PathVariable(name = "userId") Long userId,
+    public PostResource updatePost(@PathVariable(name = "userId") Long userId,
                                          @PathVariable(name = "postId") Long postId,
-                                         @Valid @RequestBody SaveCommentResource resource) {
+                                         @Valid @RequestBody SavePostResource resource) {
         return convertToResource(postService.updatePost(userId, postId, convertToEntity(resource)));
     }
 

@@ -70,7 +70,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResponseEntity<?> deletePost(Long postId) {
+    public ResponseEntity<?> deletePost(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
         postRepository.delete(post);
@@ -78,7 +78,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePost(Long postId, Post postRequest) {
+    public Post updatePost(Long userId, Long postId, Post postRequest) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
         post.setTitle(postRequest.getTitle());
@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post createPost(Post post) {
+    public Post createPost(Long userId, Post post) {
         return postRepository.save(post);
     }
 

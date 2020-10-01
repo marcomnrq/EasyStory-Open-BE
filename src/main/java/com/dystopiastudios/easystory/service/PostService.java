@@ -17,11 +17,11 @@ public interface PostService {
 
     Page<Post> getAllPostsByTagId(Long tagId, Pageable pageable);
 
-    ResponseEntity<?> deletePost(Long postId);
+    ResponseEntity<?> deletePost(Long userId, Long postId);
 
-    Post updatePost(Long postId, Post postRequest);
+    Post updatePost(Long userId, Long postId, Post postRequest);
 
-    Post createPost(Post post);
+    Post createPost(Long userId, Post post);
 
     Post getPostById(Long postId);
 
