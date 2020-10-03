@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TagResource {
+public class HashtagResource {
+    private Long Id;
     private String name;
 }

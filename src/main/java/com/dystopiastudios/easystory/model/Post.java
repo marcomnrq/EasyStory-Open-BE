@@ -48,13 +48,14 @@ public class Post extends AuditModel { //Esta clase es descendiente de AuditMode
     @JsonIgnore
     private User user;
 
-    // Un post se puede vincular con muchos tags
-    // Un tag se puede vincular con varios post (muchos a muchos)
+
+
+    //hashtags
     @ManyToMany(fetch = FetchType.LAZY, // por defecto no este cargando a cada rato los elementos, segun se requiera puntualmente
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE}) //aplique cascada el almacenamiento y la actualizacion
-    @JoinTable(name = "posts_tags", // Tabla intermedia
+               cascade = {CascadeType.PERSIST, CascadeType.MERGE}) //aplique cascada el almacenamiento y la actualizacion
+    @JoinTable(name = "posts_hashtags", // Tabla intermedia
             joinColumns = {@JoinColumn(name = "post_id")}, // Esta clase
-            inverseJoinColumns = {@JoinColumn(name = "tag_id")}) // Clase inversa
+            inverseJoinColumns = {@JoinColumn(name = "hashtag_id")}) // Clase inversa
     @JsonIgnore // No va a pedir la lista en el Json
-            List<Tag> tags; // Mantiene vinculo con los tags
+    List<Hashtag> hashtags; // Mantiene vinculo con los tags
 }

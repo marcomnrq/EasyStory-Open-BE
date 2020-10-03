@@ -2,10 +2,12 @@ package com.dystopiastudios.easystory.service;
 
 import com.dystopiastudios.easystory.exception.ResourceNotFoundException;
 import com.dystopiastudios.easystory.model.Comment;
+import com.dystopiastudios.easystory.model.Hashtag;
 import com.dystopiastudios.easystory.model.Post;
-import com.dystopiastudios.easystory.model.Tag;
+
+import com.dystopiastudios.easystory.repository.HashtagRepository;
 import com.dystopiastudios.easystory.repository.PostRepository;
-import com.dystopiastudios.easystory.repository.TagRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,7 +20,7 @@ import java.util.List;
 @Service
 public class PostServiceImpl implements PostService {
     @Autowired
-    private TagRepository tagRepository;
+    private HashtagRepository hashtagRepository;
     @Autowired
     private PostRepository postRepository;
 
@@ -37,11 +39,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post assignPostTag(Long postId, Long tagId) {
-        Tag tag = tagRepository.findById(tagId)
+        Hashtag tag = hashtagRepository.findById(tagId)
                 .orElseThrow(() -> new ResourceNotFoundException("Tag", "Id", tagId));
         return postRepository.findById(postId).map(post -> {
-            if (!post.getTags().contains(tag)) {
-                post.getTags().add(tag);
+            if (!post.getHashtags().contains(tag)) {
+                post.getHashtags().add(tag);
                 return postRepository.save(post);
             }
             return post;
@@ -51,17 +53,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post unassignPostTag(Long postId, Long tagId) {
-        Tag tag = tagRepository.findById(tagId)
+        Hashtag tag = hashtagRepository.findById(tagId)
                 .orElseThrow(() -> new ResourceNotFoundException("Tag", "Id", tagId));
         return postRepository.findById(postId).map(post -> {
-            post.getTags().remove(tag);
+            post.getHashtags().remove(tag);
             return postRepository.save(post);
         }).orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
     }
 
     //Page es una interfaz
     public Page<Post> getAllPostsByTagId(Long tagId, Pageable pageable) {
-        return tagRepository.findById(tagId).map(tag -> {
+        return hashtagRepository.findById(tagId).map(tag -> {
             List<Post> posts = tag.getPosts();
             int postsCount = posts.size();
             return new PageImpl<>(posts, pageable, postsCount);
