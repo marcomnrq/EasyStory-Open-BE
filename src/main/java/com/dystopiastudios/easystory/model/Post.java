@@ -57,4 +57,6 @@ public class Post extends AuditModel { //Esta clase es descendiente de AuditMode
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}) // Clase inversa
     @JsonIgnore // No va a pedir la lista en el Json
             List<Tag> tags; // Mantiene vinculo con los tags
+
+
 }

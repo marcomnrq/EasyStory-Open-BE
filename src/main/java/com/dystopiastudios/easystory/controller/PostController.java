@@ -37,7 +37,7 @@ public class PostController {
             Pageable pageable) {
         Page<Post> postPage = postService.getAllPostsByUserId(userId, pageable);
         List<PostResource> resources = postPage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
+        return new PageImpl<PostResource>(resources, pageable, resources.size());
     }
 
     @GetMapping("/users/{userId}/posts/{postId}")
@@ -74,7 +74,7 @@ public class PostController {
         Page<Post> postsPage = postService.getAllPosts(pageable);
         List<PostResource> resources = postsPage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
 
-        return new PageImpl<>(resources, pageable, resources.size());
+        return new PageImpl<PostResource>(resources,pageable , resources.size());
     }
 
     @GetMapping("/tags/{tagId}/posts")
