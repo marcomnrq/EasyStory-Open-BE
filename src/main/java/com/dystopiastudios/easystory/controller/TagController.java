@@ -24,7 +24,7 @@ public class  TagController {
     @Autowired
     private TagService tagService; //TagService es una interfaz, spring con Autowired inyecta el Implement con TagServiceImp
 
-    @GetMapping("/tags")
+    @GetMapping("/hashtags")
     public Page<TagResource> getAllTags(Pageable pageable) {
         List<TagResource> tags = tagService.getAllTags(pageable)
                 .getContent().stream().map(this::convertToResource).collect(Collectors.toList());
