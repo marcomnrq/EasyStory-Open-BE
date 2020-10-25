@@ -15,4 +15,6 @@ public interface UserService {
     User getUserById(Long userId);
 
     Page<User> getAllUsers(Pageable pageable);
+
+    User getUserByUsername(String username);
 }

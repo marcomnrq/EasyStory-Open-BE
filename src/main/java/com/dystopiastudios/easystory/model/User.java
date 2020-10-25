@@ -9,10 +9,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Entity // Va a tener una contraparte relacional en la DB.
-@Table(name = "users") // Para la clase User, la contraparte va a ser users en la DB.
-@Getter // Lombok nos evita programar los metodos accesores.
-@Setter // Lombok nos evita programar los metodos accesores.
+@Entity // Va a tener una contraparte relacional en la DB
+@Table(name = "users") // Para la clase User, la contraparte va a ser users en la DB
+@Getter // Lombok nos evita programar los metodos accesores
+@Setter // Lombok nos evita programar los metodos accesores
 public class User extends AuditModel {
     @Id // Patron de diseño Entity Field (llave primaria)
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Este valor se genera automaticamente
