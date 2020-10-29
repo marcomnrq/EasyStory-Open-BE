@@ -13,7 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     //Post repository va a ser alias de JpaRepository
     //Tipo de los primary key, identificadores de entidades
     Page<Post> findByUserId(Long userId, Pageable pageable); // Retorna una paginacion
-
+    Optional<Post> findByTitle(String title);
     // Como esto tienda a retornar un solo objeto le digo que es Opcional porque podria ser que no lo encuentre
     Optional<Post> findByIdAndUserId(Long id, Long userId);
 }

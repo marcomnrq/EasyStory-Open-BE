@@ -102,4 +102,10 @@ public class PostServiceImpl implements PostService {
     public Page<Post> getAllPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
     }
+
+    @Override
+    public Post getPostByTitle(String title) {
+        return postRepository.findByTitle(title)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "Title", title));
+    }
 }
