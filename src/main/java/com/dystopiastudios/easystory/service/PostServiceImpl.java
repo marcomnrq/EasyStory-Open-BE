@@ -5,9 +5,11 @@ import com.dystopiastudios.easystory.model.Comment;
 import com.dystopiastudios.easystory.model.Hashtag;
 import com.dystopiastudios.easystory.model.Post;
 
+import com.dystopiastudios.easystory.model.User;
 import com.dystopiastudios.easystory.repository.HashtagRepository;
 import com.dystopiastudios.easystory.repository.PostRepository;
 
+import com.dystopiastudios.easystory.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,6 +25,8 @@ public class PostServiceImpl implements PostService {
     private HashtagRepository hashtagRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Page<Post> getAllPostsByUserId(Long userId, Pageable pageable) {
@@ -91,6 +95,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Long userId, Post post) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        post.setUser(user);
         return postRepository.save(post);
     }
 
