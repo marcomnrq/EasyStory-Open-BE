@@ -8,6 +8,7 @@ import lombok.Setter;
 @Data
 public class PostResource extends AuditModel {
     private Long id;
+    private Long userId;
     private String title;
     private String description;
     private String content;

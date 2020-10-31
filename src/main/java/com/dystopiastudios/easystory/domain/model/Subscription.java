@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "subscriptions")
 @Data
-public class Subscription {
+public class Subscription extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +34,4 @@ public class Subscription {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User subscribed;
-
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "subscribed_at")
-    private Date subscribedAt;
 }

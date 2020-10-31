@@ -40,6 +40,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public Subscription createSubscription(Long userId, Long subscribedId, Subscription subscription) {
+        if(userId == subscribedId) {
+            throw new IllegalArgumentException("No se puede suscribir a el mismo");
+        }
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         User subscribed = userRepository.findById(subscribedId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", subscribedId));
         Optional<Subscription> existingSubscription = subscriptionRepository.findByUserIdAndSubscribedId(userId, subscribedId);
@@ -50,8 +53,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscription.setUser(user);
         subscription.setSubscribed(subscribed);
 
-        subscribed.setSubscribers(subscribed.getSubscribers() + 1);
-        user.setSubscriptions(user.getSubscriptions() + 1);
         return subscriptionRepository.save(subscription);
     }
 

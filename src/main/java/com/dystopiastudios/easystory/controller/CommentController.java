@@ -4,6 +4,7 @@ import com.dystopiastudios.easystory.domain.model.Comment;
 import com.dystopiastudios.easystory.resource.CommentResource;
 import com.dystopiastudios.easystory.resource.SaveCommentResource;
 import com.dystopiastudios.easystory.domain.service.CommentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "comments", description = "Comments desc")
 @RestController
 @RequestMapping("/api")
 public class CommentController {

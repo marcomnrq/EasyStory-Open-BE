@@ -1,5 +1,6 @@
 package com.dystopiastudios.easystory.service;
 
+import com.dystopiastudios.easystory.domain.repository.SubscriptionRepository;
 import com.dystopiastudios.easystory.domain.service.UserService;
 import com.dystopiastudios.easystory.exception.ResourceNotFoundException;
 import com.dystopiastudios.easystory.domain.model.User;
@@ -12,11 +13,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @Override
     public ResponseEntity<?> deleteUser(Long userId) {
@@ -44,8 +49,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        user.setSubscriptions(subscriptionRepository.findByUserId(userId, Pageable.unpaged()).getSize());
+        user.setSubscribers(subscriptionRepository.findBySubscribedId(userId, Pageable.unpaged()).getSize());
+        return user;
     }
 
     @Override

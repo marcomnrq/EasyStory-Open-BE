@@ -83,28 +83,26 @@ public class PostController {
 
         return new PageImpl<PostResource>(resources,pageable , resources.size());
     }
-    /*
-    @GetMapping("/tags/{tagId}/posts")
-    public Page<PostResource> getAllPostsByHashtagId(@PathVariable(name = "tagId") Long tagId, Pageable pageable) {
-        Page<Post> postsPage = postService.getAllPostsByTagId(tagId, pageable);
+
+    @GetMapping("/hashtags/{hashtagId}/posts")
+    public Page<PostResource> getAllPostsByHashtagId(@PathVariable(name = "hashtagId") Long hashtagId, Pageable pageable) {
+        Page<Post> postsPage = postService.getAllPostsByHashtagId(hashtagId, pageable);
         List<PostResource> resources = postsPage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @PostMapping("/posts/{postId}/tags/{tagId}")
-    public PostResource assignPostTag(@PathVariable(name = "postId") Long postId,
-                              @PathVariable(name = "tagId") Long tagId) {
-        return convertToResource(postService.assignPostTag(postId, tagId));
+    @PostMapping("/posts/{postId}/hashtags/{hashtagId}")
+    public PostResource assignPostHashtag(@PathVariable(name = "postId") Long postId,
+                              @PathVariable(name = "hashtagId") Long hashtagId) {
+        return convertToResource(postService.assignPostHashtag(postId, hashtagId));
     }
 
-    @DeleteMapping("/posts/{postId}/tags/{tagId}")
-    public PostResource unassignPostTag(@PathVariable(name = "postId") Long postId,
-                                @PathVariable(name = "tagId") Long tagId) {
+    @DeleteMapping("/posts/{postId}/hashtags/{hashtagId}")
+    public PostResource unassignPostHashtag(@PathVariable(name = "postId") Long postId,
+                                @PathVariable(name = "hashtagId") Long hashtagId) {
 
-        return convertToResource(postService.unassignPostTag(postId, tagId));
+        return convertToResource(postService.unassignPostHashtag(postId, hashtagId));
     }
-
-     */
 
     private Post convertToEntity(SavePostResource resource) {
         return mapper.map(resource, Post.class);
