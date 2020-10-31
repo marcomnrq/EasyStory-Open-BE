@@ -1,8 +1,9 @@
 package com.dystopiastudios.easystory.service;
 
+import com.dystopiastudios.easystory.domain.service.UserService;
 import com.dystopiastudios.easystory.exception.ResourceNotFoundException;
-import com.dystopiastudios.easystory.model.User;
-import com.dystopiastudios.easystory.repository.UserRepository;
+import com.dystopiastudios.easystory.domain.model.User;
+import com.dystopiastudios.easystory.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,8 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         userRepository.delete(user);
         return ResponseEntity.ok().build();
     }
@@ -53,12 +53,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(pageable);
     }
 
-    @Override
-    public User getUserByUsername(String username){
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "Username", username));
-
-    }
 
 
 }

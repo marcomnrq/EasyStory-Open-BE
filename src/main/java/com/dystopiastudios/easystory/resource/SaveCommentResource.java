@@ -1,15 +1,12 @@
 package com.dystopiastudios.easystory.resource;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Lob;
+import lombok.Data;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
+@Data
 public class SaveCommentResource {
     @NotNull
-    @Lob
-    private String text;
+    @NotBlank
+    private String content;
 }

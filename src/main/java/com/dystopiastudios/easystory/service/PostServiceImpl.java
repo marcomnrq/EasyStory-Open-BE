@@ -1,12 +1,14 @@
 package com.dystopiastudios.easystory.service;
 
+import com.dystopiastudios.easystory.domain.service.PostService;
 import com.dystopiastudios.easystory.exception.ResourceNotFoundException;
-import com.dystopiastudios.easystory.model.Comment;
-import com.dystopiastudios.easystory.model.Hashtag;
-import com.dystopiastudios.easystory.model.Post;
+import com.dystopiastudios.easystory.domain.model.User;
+import com.dystopiastudios.easystory.domain.model.Hashtag;
+import com.dystopiastudios.easystory.domain.model.Post;
 
-import com.dystopiastudios.easystory.repository.HashtagRepository;
-import com.dystopiastudios.easystory.repository.PostRepository;
+import com.dystopiastudios.easystory.domain.repository.HashtagRepository;
+import com.dystopiastudios.easystory.domain.repository.PostRepository;
+import com.dystopiastudios.easystory.domain.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,8 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
     @Autowired
     private HashtagRepository hashtagRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private PostRepository postRepository;
 
@@ -38,12 +42,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post assignPostTag(Long postId, Long tagId) {
-        Hashtag tag = hashtagRepository.findById(tagId)
-                .orElseThrow(() -> new ResourceNotFoundException("Tag", "Id", tagId));
+    public Post assignPostHashtag(Long postId, Long hashtagId) {
+        Hashtag hashtag = hashtagRepository.findById(hashtagId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hashtag", "Id", hashtagId));
         return postRepository.findById(postId).map(post -> {
-            if (!post.getHashtags().contains(tag)) {
-                post.getHashtags().add(tag);
+            if (!post.getHashtags().contains(hashtag)) {
+                post.getHashtags().add(hashtag);
                 return postRepository.save(post);
             }
             return post;
@@ -52,23 +56,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post unassignPostTag(Long postId, Long tagId) {
-        Hashtag tag = hashtagRepository.findById(tagId)
-                .orElseThrow(() -> new ResourceNotFoundException("Tag", "Id", tagId));
+    public Post unassignPostHashtag(Long postId, Long hashtagId) {
+        Hashtag hashtag = hashtagRepository.findById(hashtagId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hashtag", "Id", hashtagId));
         return postRepository.findById(postId).map(post -> {
-            post.getHashtags().remove(tag);
+            post.getHashtags().remove(hashtag);
             return postRepository.save(post);
         }).orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
     }
 
-    //Page es una interfaz
-    public Page<Post> getAllPostsByTagId(Long tagId, Pageable pageable) {
-        return hashtagRepository.findById(tagId).map(tag -> {
-            List<Post> posts = tag.getPosts();
+    public Page<Post> getAllPostsByHashtagId(Long hashtagId, Pageable pageable) {
+        return hashtagRepository.findById(hashtagId).map(hashtag -> {
+            List<Post> posts = hashtag.getPosts();
             int postsCount = posts.size();
             return new PageImpl<>(posts, pageable, postsCount);
-        })
-                .orElseThrow(() -> new ResourceNotFoundException("Tag", "Id", tagId));
+        }).orElseThrow(() -> new ResourceNotFoundException("Hashtag", "Id", hashtagId));
     }
 
     @Override
@@ -91,6 +93,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Long userId, Post post) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        post.setUser(user);
         return postRepository.save(post);
     }
 

@@ -1,10 +1,10 @@
 package com.dystopiastudios.easystory.controller;
 
-import com.dystopiastudios.easystory.model.Hashtag;
+import com.dystopiastudios.easystory.domain.model.Hashtag;
 import com.dystopiastudios.easystory.resource.HashtagResource;
 import com.dystopiastudios.easystory.resource.SaveHashtagResource;
-import com.dystopiastudios.easystory.service.HashtagService;
-import com.dystopiastudios.easystory.service.PostService;
+import com.dystopiastudios.easystory.domain.service.HashtagService;
+import com.dystopiastudios.easystory.domain.service.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +59,10 @@ public class HashtagController {
         return hashtagService.deleteHashtag(hashtagId);
     }
     private Hashtag convertToEntity(SaveHashtagResource resource) {
-        return mapper.map(resource, com.dystopiastudios.easystory.model.Hashtag.class);
+        return mapper.map(resource, Hashtag.class);
     }
 
-    private HashtagResource convertToResource(com.dystopiastudios.easystory.model.Hashtag entity) {
+    private HashtagResource convertToResource(Hashtag entity) {
         return mapper.map(entity, HashtagResource.class);
     }
 }

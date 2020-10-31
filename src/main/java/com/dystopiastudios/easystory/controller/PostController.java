@@ -1,15 +1,19 @@
 package com.dystopiastudios.easystory.controller;
 
-import com.dystopiastudios.easystory.model.Post;
+import com.dystopiastudios.easystory.domain.model.Post;
 import com.dystopiastudios.easystory.resource.CommentResource;
 import com.dystopiastudios.easystory.resource.PostResource;
 import com.dystopiastudios.easystory.resource.SavePostResource;
-import com.dystopiastudios.easystory.service.PostService;
+import com.dystopiastudios.easystory.domain.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +35,9 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All Posts returned", content = @Content(mediaType = "application/json"))
+    })
     @GetMapping("/users/{userId}/posts")
     public Page<PostResource> getAllPostsByUserId(
             @PathVariable(name = "userId") Long userId,
@@ -76,9 +83,9 @@ public class PostController {
 
         return new PageImpl<PostResource>(resources,pageable , resources.size());
     }
-
+    /*
     @GetMapping("/tags/{tagId}/posts")
-    public Page<PostResource> getAllPostsByTagId(@PathVariable(name = "tagId") Long tagId, Pageable pageable) {
+    public Page<PostResource> getAllPostsByHashtagId(@PathVariable(name = "tagId") Long tagId, Pageable pageable) {
         Page<Post> postsPage = postService.getAllPostsByTagId(tagId, pageable);
         List<PostResource> resources = postsPage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
@@ -96,6 +103,8 @@ public class PostController {
 
         return convertToResource(postService.unassignPostTag(postId, tagId));
     }
+
+     */
 
     private Post convertToEntity(SavePostResource resource) {
         return mapper.map(resource, Post.class);

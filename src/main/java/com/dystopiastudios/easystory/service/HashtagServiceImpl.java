@@ -1,9 +1,10 @@
 package com.dystopiastudios.easystory.service;
 
+import com.dystopiastudios.easystory.domain.service.HashtagService;
 import com.dystopiastudios.easystory.exception.ResourceNotFoundException;
-import com.dystopiastudios.easystory.model.Hashtag;
-import com.dystopiastudios.easystory.repository.HashtagRepository;
-import com.dystopiastudios.easystory.repository.PostRepository;
+import com.dystopiastudios.easystory.domain.model.Hashtag;
+import com.dystopiastudios.easystory.domain.repository.HashtagRepository;
+import com.dystopiastudios.easystory.domain.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,32 +38,32 @@ public class HashtagServiceImpl implements HashtagService {
     }
 
     @Override
-    public Hashtag getHashtagById(Long HashtagId) {
-        return hashtagRepository.findById(HashtagId)
-                .orElseThrow(() -> new ResourceNotFoundException("Hashtag", "Id", HashtagId));
+    public Hashtag getHashtagById(Long hashtagId) {
+        return hashtagRepository.findById(hashtagId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hashtag", "Id", hashtagId));
 
     }
 
     @Override
-    public Hashtag createHashtag(Hashtag Hashtag) {
-        return hashtagRepository.save(Hashtag);
+    public Hashtag createHashtag(Hashtag hashtag) {
+        return hashtagRepository.save(hashtag);
     }
 
     @Override
-    public Hashtag updateHashtag(Long HashtagId, Hashtag hashtagDetails) {
-        return hashtagRepository.findById(HashtagId).map(hashtag -> {
+    public Hashtag updateHashtag(Long hashtagId, Hashtag hashtagDetails) {
+        return hashtagRepository.findById(hashtagId).map(hashtag -> {
             hashtag.setName(hashtagDetails.getName());
             return hashtagRepository.save(hashtag);
-        }).orElseThrow(() -> new ResourceNotFoundException("Tag", "Id", HashtagId));
+        }).orElseThrow(() -> new ResourceNotFoundException("Hashtag", "Id", hashtagId));
 
     }
 
     @Override
-    public ResponseEntity<?> deleteHashtag(Long HashtagId) {
-        return hashtagRepository.findById(HashtagId).map(tag -> {
-            hashtagRepository.delete(tag);
+    public ResponseEntity<?> deleteHashtag(Long hashtagId) {
+        return hashtagRepository.findById(hashtagId).map(hashtag -> {
+            hashtagRepository.delete(hashtag);
             return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("Tag", "Id", HashtagId));
+        }).orElseThrow(() -> new ResourceNotFoundException("Hashtag", "Id", hashtagId));
 
     }
 }

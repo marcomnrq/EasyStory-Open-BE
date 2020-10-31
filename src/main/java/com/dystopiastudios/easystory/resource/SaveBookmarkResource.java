@@ -1,14 +1,10 @@
 package com.dystopiastudios.easystory.resource;
 
 import com.sun.istack.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class SaveBookmarkResource {
-    @NotNull
-    private Long userId;
-    @NotNull
-    private Long postId;
 }
