@@ -1,9 +1,10 @@
 package com.dystopiastudios.easystory.controller;
 
-import com.dystopiastudios.easystory.model.Comment;
+import com.dystopiastudios.easystory.domain.model.Comment;
 import com.dystopiastudios.easystory.resource.CommentResource;
 import com.dystopiastudios.easystory.resource.SaveCommentResource;
-import com.dystopiastudios.easystory.service.CommentService;
+import com.dystopiastudios.easystory.domain.service.CommentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "comments", description = "Comments desc")
 @RestController
 @RequestMapping("/api")
 public class CommentController {
@@ -23,6 +25,14 @@ public class CommentController {
     private ModelMapper mapper;
     @Autowired
     private CommentService commentService;
+
+    @PostMapping("/users/{userId}/posts/{postId}/comments")
+    public CommentResource createComment(
+            @PathVariable(name = "userId") Long userId,
+            @PathVariable(name = "postId") Long postId,
+            @Valid @RequestBody SaveCommentResource resource) {
+        return convertToResource(commentService.createComment(userId, postId, convertToEntity(resource)));
+    }
 
     @GetMapping("/posts/{postId}/comments")
     public Page<CommentResource> getAllCommentsByPostId(
@@ -33,30 +43,32 @@ public class CommentController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @GetMapping("/posts/{postId}/comments/{commentId}")
-    public CommentResource getCommentByIdAndPostId(@PathVariable(name = "postId") Long postId,
-                                           @PathVariable(name = "commentId") Long commentId) {
-        return convertToResource(commentService.getCommentByIdAndPostId(postId, commentId));
+    @GetMapping("/users/{userId}/comments")
+    public Page<CommentResource> getAllCommentsByUserId(
+            @PathVariable(name = "userId") Long userId,
+            Pageable pageable) {
+        Page<Comment> commentPage = commentService.getAllCommentsByUserId(userId, pageable);
+        List<CommentResource> resources = commentPage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @PostMapping("/posts/{postId}/comments")
-    public CommentResource createComment(@PathVariable(name = "postId") Long postId,
-                                 @Valid @RequestBody SaveCommentResource resource) {
-        return convertToResource(commentService.createComment(postId, convertToEntity(resource)));
-
+    @GetMapping("/comments/{commentId}")
+    public CommentResource getCommentById(
+            @PathVariable(name = "commentId") Long commentId) {
+        return convertToResource(commentService.getCommentById(commentId));
     }
 
-    @PutMapping("/posts/{postId}/comments/{commentId}")
-    public CommentResource updateComment(@PathVariable(name = "postId") Long postId,
-                                 @PathVariable(name = "commentId") Long commentId,
-                                 @Valid @RequestBody SaveCommentResource resource) {
-        return convertToResource(commentService.updateComment(postId, commentId, convertToEntity(resource)));
+    @PutMapping("/comments/{commentId}")
+    public CommentResource updateComment(
+            @PathVariable(name = "commentId") Long commentId,
+            @Valid @RequestBody SaveCommentResource resource) {
+        return convertToResource(commentService.updateComment(commentId, convertToEntity(resource)));
     }
 
-    @DeleteMapping("/posts/{postId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable(name = "postId") Long postId,
-                                           @PathVariable(name = "commentId") Long commentId) {
-        return commentService.deleteComment(postId, commentId);
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<?> deleteComment(
+            @PathVariable(name = "commentId") Long commentId) {
+        return commentService.deleteComment(commentId);
     }
 
     private Comment convertToEntity(SaveCommentResource resource) {
@@ -66,6 +78,5 @@ public class CommentController {
     private CommentResource convertToResource(Comment entity) {
         return mapper.map(entity, CommentResource.class);
     }
-
 
 }

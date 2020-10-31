@@ -1,15 +1,19 @@
 package com.dystopiastudios.easystory.controller;
 
-import com.dystopiastudios.easystory.model.Post;
+import com.dystopiastudios.easystory.domain.model.Post;
 import com.dystopiastudios.easystory.resource.CommentResource;
 import com.dystopiastudios.easystory.resource.PostResource;
 import com.dystopiastudios.easystory.resource.SavePostResource;
-import com.dystopiastudios.easystory.service.PostService;
+import com.dystopiastudios.easystory.domain.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +35,9 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All Posts returned", content = @Content(mediaType = "application/json"))
+    })
     @GetMapping("/users/{userId}/posts")
     public Page<PostResource> getAllPostsByUserId(
             @PathVariable(name = "userId") Long userId,
@@ -77,24 +84,24 @@ public class PostController {
         return new PageImpl<PostResource>(resources,pageable , resources.size());
     }
 
-    @GetMapping("/tags/{tagId}/posts")
-    public Page<PostResource> getAllPostsByTagId(@PathVariable(name = "tagId") Long tagId, Pageable pageable) {
-        Page<Post> postsPage = postService.getAllPostsByTagId(tagId, pageable);
+    @GetMapping("/hashtags/{hashtagId}/posts")
+    public Page<PostResource> getAllPostsByHashtagId(@PathVariable(name = "hashtagId") Long hashtagId, Pageable pageable) {
+        Page<Post> postsPage = postService.getAllPostsByHashtagId(hashtagId, pageable);
         List<PostResource> resources = postsPage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @PostMapping("/posts/{postId}/tags/{tagId}")
-    public PostResource assignPostTag(@PathVariable(name = "postId") Long postId,
-                              @PathVariable(name = "tagId") Long tagId) {
-        return convertToResource(postService.assignPostTag(postId, tagId));
+    @PostMapping("/posts/{postId}/hashtags/{hashtagId}")
+    public PostResource assignPostHashtag(@PathVariable(name = "postId") Long postId,
+                              @PathVariable(name = "hashtagId") Long hashtagId) {
+        return convertToResource(postService.assignPostHashtag(postId, hashtagId));
     }
 
-    @DeleteMapping("/posts/{postId}/tags/{tagId}")
-    public PostResource unassignPostTag(@PathVariable(name = "postId") Long postId,
-                                @PathVariable(name = "tagId") Long tagId) {
+    @DeleteMapping("/posts/{postId}/hashtags/{hashtagId}")
+    public PostResource unassignPostHashtag(@PathVariable(name = "postId") Long postId,
+                                @PathVariable(name = "hashtagId") Long hashtagId) {
 
-        return convertToResource(postService.unassignPostTag(postId, tagId));
+        return convertToResource(postService.unassignPostHashtag(postId, hashtagId));
     }
 
     private Post convertToEntity(SavePostResource resource) {
