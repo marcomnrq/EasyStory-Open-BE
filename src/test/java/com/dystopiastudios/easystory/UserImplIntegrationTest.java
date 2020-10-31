@@ -1,9 +1,10 @@
 package com.dystopiastudios.easystory;
 
+import com.dystopiastudios.easystory.domain.model.User;
+import com.dystopiastudios.easystory.domain.repository.SubscriptionRepository;
+import com.dystopiastudios.easystory.domain.repository.UserRepository;
+import com.dystopiastudios.easystory.domain.service.UserService;
 import com.dystopiastudios.easystory.exception.ResourceNotFoundException;
-import com.dystopiastudios.easystory.model.User;
-import com.dystopiastudios.easystory.repository.UserRepository;
-import com.dystopiastudios.easystory.service.UserService;
 import com.dystopiastudios.easystory.service.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,9 @@ public class UserImplIntegrationTest {
 
     @Autowired
     private UserService userService;
+
+    @MockBean
+    private SubscriptionRepository subscriptionRepository;
 
     @TestConfiguration
     static class UserImplIntegrationTestConfiguration{

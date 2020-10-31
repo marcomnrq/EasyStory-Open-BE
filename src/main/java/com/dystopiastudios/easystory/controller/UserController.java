@@ -1,13 +1,16 @@
 package com.dystopiastudios.easystory.controller;
-import com.dystopiastudios.easystory.model.Post;
-import com.dystopiastudios.easystory.model.User;
+import com.dystopiastudios.easystory.domain.model.Post;
+import com.dystopiastudios.easystory.domain.model.User;
 import com.dystopiastudios.easystory.resource.PostResource;
 import com.dystopiastudios.easystory.resource.SavePostResource;
 import com.dystopiastudios.easystory.resource.UserResource;
 import com.dystopiastudios.easystory.resource.SaveUserResource;
-import com.dystopiastudios.easystory.service.UserService;
+import com.dystopiastudios.easystory.domain.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +35,11 @@ public class UserController {
     private UserService userService;
 
     @Operation(summary = "Get Users", description = "Get All Users by Pages", tags = { "users" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All Posts returned", content = @Content(mediaType = "application/json"))
+    })
     @GetMapping("/users")
-    public Page<UserResource> getAllUsers(
-            @Parameter(description="Pageable Parameter")
-                    Pageable pageable) {
+    public Page<UserResource> getAllUsers(Pageable pageable) {
         Page<User> usersPage = userService.getAllUsers(pageable);
         List<UserResource> resources = usersPage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
 
