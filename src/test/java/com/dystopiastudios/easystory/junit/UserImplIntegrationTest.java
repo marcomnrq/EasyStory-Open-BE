@@ -1,4 +1,4 @@
-package com.dystopiastudios.easystory;
+package com.dystopiastudios.easystory.junit;
 
 import com.dystopiastudios.easystory.exception.ResourceNotFoundException;
 import com.dystopiastudios.easystory.model.User;
