@@ -5,7 +5,7 @@ Feature: Comment Creation
 
   Scenario: Comment was created
     Given i am a reader
-    When i make a post request to path "api/users/1/posts/2/comments"
+    When i make a post request to path "api/users/1/posts/1/comments"
     Then the status response code should be 200
 
   Scenario: Comment was not created
