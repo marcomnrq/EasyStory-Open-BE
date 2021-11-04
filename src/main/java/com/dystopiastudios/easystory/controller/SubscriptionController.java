@@ -36,6 +36,7 @@ public class SubscriptionController {
     @Autowired
     private SubscriptionService subscriptionService;
 
+    @Operation(summary = "Get all subscriptions that a user has")
     @GetMapping("/users/{userId}/subscriptions")
     public Page<SubscriptionResource> getAllSubscriptionsByUserId(
             @PathVariable(name = "userId") Long userId, Pageable pageable){
@@ -46,7 +47,7 @@ public class SubscriptionController {
         return new PageImpl<>(subscriptions, pageable, subscriptionsCount);
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all user's subscribers")
     @GetMapping("/users/{userId}/subscribers")
     public Page<SubscriptionResource> getAllSubscribersByUserId(
             @PathVariable(name = "userId") Long userId, Pageable pageable){
@@ -57,14 +58,14 @@ public class SubscriptionController {
         return new PageImpl<>(subscribers, pageable, subscribersCount);
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get subscription state by two user ids")
     @GetMapping("/users/{userId}/subscriptions/{subscribedId}")
     public SubscriptionResource getSubscriptionByUserIdAndSubscribedId(@PathVariable(name = "userId") Long userId,
                                                          @PathVariable(name= "subscribedId") Long subscribedId){
         return convertToResource(subscriptionService.getSubscriptionByUserIdAndSubscribedId(userId, subscribedId));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Create a user subscription")
     @PostMapping("/users/{userId}/subscriptions/{subscribedId}")
     public SubscriptionResource createSubscription(@PathVariable(name = "userId")Long userId,
                                            @PathVariable(name = "subscribedId") Long subscribedId,
@@ -72,7 +73,7 @@ public class SubscriptionController {
         return convertToResource(subscriptionService.createSubscription(userId, subscribedId,convertToEntity(resource)));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Delete a subscription")
     @DeleteMapping("/users/{userId}/subscriptions/{subscribedId}")
     public ResponseEntity<?> deleteSubscription(
             @PathVariable(name = "userId") Long userId,
@@ -80,7 +81,7 @@ public class SubscriptionController {
         return subscriptionService.deleteSubscription(userId, subscribedId);
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all subscriptions")
     @GetMapping("/subscriptions")
     public Page<SubscriptionResource> getAllSubscriptions(
             @Parameter(description = "Pageable Parameter")

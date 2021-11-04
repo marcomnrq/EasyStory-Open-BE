@@ -58,20 +58,21 @@ public class UserController {
     }
 
     //@Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(summary = "Create a user")
     @PostMapping("/users")
     public UserResource createUser(@Valid @RequestBody SaveUserResource resource)  {
         User user = convertToEntity(resource);
         return convertToResource(userService.createUser(user));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Update a user")
     @PutMapping("/users/{id}")
     public UserResource updateUser(@PathVariable(name = "id") Long userId, @Valid @RequestBody SaveUserResource resource) {
         User user = convertToEntity(resource);
         return convertToResource(userService.updateUser(userId, user));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Delete a user")
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable(name = "id") Long userId) {
         return userService.deleteUser(userId);

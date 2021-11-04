@@ -29,7 +29,7 @@ public class QualificationController {
     @Autowired
     private QualificationService qualificationService;
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all qualifications by user id")
     @GetMapping("/users/{userId}/qualifications")
     public Page<QualificationResource> getAllQualificationByUserId(
             @PathVariable(name = "userId") Long userId, Pageable pageable){
@@ -40,6 +40,7 @@ public class QualificationController {
     }
 
     //@Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(summary = "Get all qualifications in a post")
     @GetMapping("/posts/{postId}/qualifications")
     public Page<QualificationResource> getAllQualificationByPostId(
             @PathVariable(name = "postId") Long postId, Pageable pageable){
@@ -49,7 +50,7 @@ public class QualificationController {
         return  new PageImpl<>(qualifications,pageable,qualification_count);
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Create a new qualification")
     @PostMapping("/users/{userId}/posts/{postId}/qualifications")
     public QualificationResource createQualification(@PathVariable(name = "userId")Long userId,
                                            @PathVariable(name = "postId") Long postId,
@@ -57,7 +58,7 @@ public class QualificationController {
         return convertToResource(qualificationService.createQualification(userId,postId,convertToEntity(resource)));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Edit a qualification")
     @PutMapping("/users/{userId}/posts/{postId}/qualifications")
     public QualificationResource editQualification(@PathVariable(name = "userId")Long userId,
                                                      @PathVariable(name = "postId") Long postId,
@@ -65,14 +66,14 @@ public class QualificationController {
         return convertToResource(qualificationService.editQualification(userId,postId,convertToEntity(resource)));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get a qualification by user and post id")
     @GetMapping("/users/{userId}/posts/{postId}/qualifications")
     public QualificationResource getQualificationByUserIdAndPostId(@PathVariable(name = "userId") Long userId,
                                                          @PathVariable(name= "postId") Long postId){
         return convertToResource(qualificationService.getQualificationByUserIdAndPostId(userId, postId));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Delete a qualification")
     @DeleteMapping("/users/{userId}/posts/{postId}/qualifications")
     public ResponseEntity<?> deleteQualification(
             @PathVariable(name = "userId") Long userId,

@@ -44,7 +44,7 @@ public class PostController {
             @ApiResponse(responseCode = "200", description = "All Posts returned", content = @Content(mediaType = "application/json"))
     })
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all writer's post")
     @GetMapping("/users/{userId}/posts")
     public Page<PostResource> getAllPostsByUserId(@PathVariable(name = "userId") Long userId, Pageable pageable) {
         List<PostResource> posts = postService.getAllPostsByUserId(userId,pageable)
@@ -53,7 +53,7 @@ public class PostController {
         return new PageImpl<>(posts, pageable, count);
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get a single post")
     @GetMapping("/posts/{id}")
     public PostResource getPostById(
             @Parameter(description="User Id")
@@ -61,7 +61,7 @@ public class PostController {
         return convertToResource(postService.getPostById(postId));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get a post by user id")
     @GetMapping("/users/{userId}/posts/{postId}")
     public PostResource getPostByIdAndUserId(@PathVariable(name = "userId") Long userId,
                                                    @PathVariable(name = "postId") Long postId) {
@@ -69,6 +69,7 @@ public class PostController {
     }
 
     //@Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(summary = "Create a post by user id")
     @PostMapping("/users/{userId}/posts")
     public PostResource createPost(@PathVariable(name = "userId") Long userId,
                                          @Valid @RequestBody SavePostResource resource) {
@@ -76,7 +77,7 @@ public class PostController {
 
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Update a user writer's post")
     @PutMapping("/users/{userId}/posts/{postId}")
     public PostResource updatePost(@PathVariable(name = "userId") Long userId,
                                          @PathVariable(name = "postId") Long postId,
@@ -84,14 +85,14 @@ public class PostController {
         return convertToResource(postService.updatePost(userId, postId, convertToEntity(resource)));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Delete a post by user id")
     @DeleteMapping("/users/{userId}/posts/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable(name = "userId") Long userId,
                                            @PathVariable(name = "postId") Long postId) {
         return postService.deletePost(userId, postId);
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all posts")
     @GetMapping("/posts")
     public Page<PostResource> getAllPosts(
             @Parameter(description="Pageable Parameter")
@@ -102,7 +103,7 @@ public class PostController {
         return new PageImpl<PostResource>(resources,pageable , resources.size());
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all posts by hashtag id")
     @GetMapping("/hashtags/{hashtagId}/posts")
     public Page<PostResource> getAllPostsByHashtagId(@PathVariable(name = "hashtagId") Long hashtagId, Pageable pageable) {
         Page<Post> postsPage = postService.getAllPostsByHashtagId(hashtagId, pageable);
@@ -110,14 +111,14 @@ public class PostController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Assign a post to a hashtag")
     @PostMapping("/posts/{postId}/hashtags/{hashtagId}")
     public PostResource assignPostHashtag(@PathVariable(name = "postId") Long postId,
                               @PathVariable(name = "hashtagId") Long hashtagId) {
         return convertToResource(postService.assignPostHashtag(postId, hashtagId));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Deassign a post to a hashtag")
     @DeleteMapping("/posts/{postId}/hashtags/{hashtagId}")
     public PostResource unassignPostHashtag(@PathVariable(name = "postId") Long postId,
                                 @PathVariable(name = "hashtagId") Long hashtagId) {

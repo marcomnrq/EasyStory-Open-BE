@@ -32,6 +32,7 @@ public class AuthenticationController {
 
 
     @PostMapping("/sign-in")
+    @Operation (summary = "Authenticate user account")
     public ResponseEntity<?> generateAuthenticationToken(
             @RequestBody AuthenticationRequest request)
             throws Exception {

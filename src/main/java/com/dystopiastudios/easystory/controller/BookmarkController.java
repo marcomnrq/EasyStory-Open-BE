@@ -36,6 +36,7 @@ public class BookmarkController {
     private BookmarkService bookmarkService;
 
     //@Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation (summary = "Get bookmarks by a user")
     @GetMapping("/users/{userId}/bookmarks")
     public Page<BookmarkResource>getAllBookmarksByUserId(
             @PathVariable(name = "userId") Long userId, Pageable pageable){
@@ -46,7 +47,7 @@ public class BookmarkController {
         return new PageImpl<>(bookmarks, pageable, bookmark_count);
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Add a post to saved bookmarks")
     @PostMapping("/users/{userId}/posts/{postId}/bookmarks")
     public BookmarkResource createBookmark(@PathVariable(name = "userId")Long userId,
                                            @PathVariable(name = "postId") Long postId,
@@ -54,14 +55,14 @@ public class BookmarkController {
         return convertToResource(bookmarkService.createBookmark(userId,postId,convertToEntity(resource)));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get a bookmark by a post and user id")
     @GetMapping("/users/{userId}/posts/{postId}/bookmarks")
     public BookmarkResource getBookmarkByUserIdAndPostId(@PathVariable(name = "userId") Long userId,
                                                          @PathVariable(name= "postId") Long postId){
         return convertToResource(bookmarkService.getBookmarkByUserIdAndPostId(userId, postId));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Removed bookmark from a user post")
     @DeleteMapping("/users/{userId}/posts/{postId}/bookmarks")
     public ResponseEntity<?> deleteBookmark(
             @PathVariable(name = "userId") Long userId,
@@ -69,7 +70,7 @@ public class BookmarkController {
         return bookmarkService.deleteBookmark(userId, postId);
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all bookmarks")
     @GetMapping("/bookmarks")
     public Page<BookmarkResource>getAllBookmarks(
             @Parameter(description = "Pageable Parameter")

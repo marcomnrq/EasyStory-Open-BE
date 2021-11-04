@@ -29,6 +29,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    @Operation (summary = "Get user comments in a post")
     @PostMapping("/users/{userId}/posts/{postId}/comments")
     public CommentResource createComment(
             @PathVariable(name = "userId") Long userId,
@@ -37,7 +38,7 @@ public class CommentController {
         return convertToResource(commentService.createComment(userId, postId, convertToEntity(resource)));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all comments in a post")
     @GetMapping("/posts/{postId}/comments")
     public Page<CommentResource> getAllCommentsByPostId(
             @PathVariable(name = "postId") Long postId,
@@ -47,7 +48,7 @@ public class CommentController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get all comments made by a user")
     @GetMapping("/users/{userId}/comments")
     public Page<CommentResource> getAllCommentsByUserId(
             @PathVariable(name = "userId") Long userId,
@@ -57,14 +58,14 @@ public class CommentController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Get a single comment")
     @GetMapping("/comments/{commentId}")
     public CommentResource getCommentById(
             @PathVariable(name = "commentId") Long commentId) {
         return convertToResource(commentService.getCommentById(commentId));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Update a single comment")
     @PutMapping("/comments/{commentId}")
     public CommentResource updateComment(
             @PathVariable(name = "commentId") Long commentId,
@@ -72,7 +73,7 @@ public class CommentController {
         return convertToResource(commentService.updateComment(commentId, convertToEntity(resource)));
     }
 
-    @Operation(security={ @SecurityRequirement(name="Authorization") })
+    @Operation(security={ @SecurityRequirement(name="Authorization") }, summary = "Delete a single comment")
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<?> deleteComment(
             @PathVariable(name = "commentId") Long commentId) {
